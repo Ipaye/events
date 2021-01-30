@@ -1,0 +1,79 @@
+@import "partials/fonts";
+@import "partials/global";
+@import "partials/reset";
+@import "partials/mq";
+@import "partials/mixin";
+
+a {
+  text-decoration: none;
+}
+
+body {
+  background: $background-color;
+  font-size: 10px;
+  height: 100%;
+  overflow: auto;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.container {
+  width: 1440px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+#app {
+  width: 100%;
+  min-height: 100vh;
+  font-family: $main-font;
+  color: $text-color;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 0.3s;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
+
+.button-normal {
+  @include button;
+  padding: 15px 25px;
+}
+
+.button-large {
+  @include button;
+  padding: 15px 50px;
+}
+
+.primary-heading {
+  font-family: Flutterwave;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 40px;
+  margin-bottom: 20px;
+
+  @include little-desktop {
+    font-size: 25px;
+  }
+}
+
+// transitions
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
+
+.modal-enter {
+  opacity: 0;
+}
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.5);
+  transform: scale(1.5);
+}

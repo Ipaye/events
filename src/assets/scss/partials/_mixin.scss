@@ -1,0 +1,21 @@
+@mixin button {
+  font-family: Flutterwave;
+  font-size: 14px;
+  line-height: 14px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #ffffff !important;
+
+  background: #f5a623;
+  border-radius: 4.06693px;
+
+  padding: 15px 25px;
+  will-change: transform, opacity, background-color;
+  transition: ease-in-out 0.3s all;
+
+  &:hover {
+    opacity: 0.88;
+    background-color: #db8c0a;
+    transform: translate(0, -1px);
+  }
+}
