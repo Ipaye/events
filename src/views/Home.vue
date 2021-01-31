@@ -4,7 +4,15 @@
     <main id="events">
       <h1 class="primary-heading">The best events happening now.</h1>
       <section id="happening-events" class="events__page-listing">
-        <EventCard />
+        <router-link
+          role="link"
+          :to="{
+            name: 'SingleEventView',
+            params: { id: '1' },
+          }"
+        >
+          <EventCard />
+        </router-link>
         <EventCard />
         <EventCard />
       </section>

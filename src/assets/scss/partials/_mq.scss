@@ -1,6 +1,7 @@
 // MBreakers
 
 $thirteen-inch: 2580px;
+$laptop-width: 1240px;
 $desktop-width: 1024px;
 $little-desktop: 850px;
 $tablet-width: 768px;
@@ -16,6 +17,12 @@ $tiny-mobile-width: 330px;
 
 @mixin thirteen {
   @media screen and (max-width: #{$thirteen-inch}) {
+    @content;
+  }
+}
+
+@mixin laptops {
+  @media screen and (max-width: #{$laptop-width}) {
     @content;
   }
 }
