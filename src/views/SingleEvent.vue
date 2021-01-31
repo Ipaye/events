@@ -1,5 +1,5 @@
 <template>
-  <div class=" container">
+  <div class="container with-background">
     <Navbar />
     <main class="single-event">
       <div class="single-event__top">
@@ -68,14 +68,183 @@
       </div>
     </main>
     <Footer />
+
+    <ModalWrapper v-if="false" class="modal-container">
+      <div v-if="true">
+        <div class="modal-header">
+          <h4 class="heading">REGISTER FOR FREE</h4>
+          <button>
+            <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M13.5 4.5l-9 9M4.5 4.5l9 9"
+                stroke="#333"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+        <form class="form">
+          <div class="form__group">
+            <label class="form__group-label" for="name">Full name</label>
+            <input class="form__group-input" type="text" />
+          </div>
+          <div class="form__group">
+            <label class="form__group-label" for="email"> Email address</label>
+            <input class="form__group-input" type="email" />
+          </div>
+          <div class="form__group">
+            <label class="form__group-label" for="number">Phone number</label>
+            <input type="text" class="form__group-input" />
+          </div>
+          <div class="button-wrapper">
+            <button class="button-normal form__group-button">
+              REGISTER
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="success__notification" v-if="false">
+        <div class="success__notification-header">
+          <button>
+            <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M18 6L6 18M6 6l12 12"
+                stroke="#333"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+        <div class="success__notification-check">
+          <div class="success__notification-check-icon">
+            <svg width="137" height="137" viewBox="0 0 137 137" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                class="checkmark__circle"
+                d="M125.583 63.2476V68.4993C125.576 80.8089 121.59 92.7864 114.22 102.646C106.849 112.505 96.4894 119.717 84.685 123.207C72.8806 126.698 60.2642 126.278 48.7174 122.013C37.1707 117.747 27.3122 109.862 20.6124 99.5359C13.9126 89.2093 10.7303 76.9937 11.5402 64.7108C12.3502 52.4279 17.1089 40.7358 25.1067 31.3784C33.1045 22.021 43.9128 15.4996 55.9197 12.7868C67.9267 10.074 80.4889 11.3151 91.7328 16.3251"
+                stroke="#F5A623"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                class="checkmark__check"
+                d="M125.583 22.8335L68.5 79.9739L51.375 62.8489"
+                stroke="#F5A623"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+        </div>
+        <div class="success__notification-text">You have successfully registered for</div>
+      </div>
+    </ModalWrapper>
   </div>
 </template>
 
 <script>
-export default {};
+import ModalWrapper from "@/components/ModalWrapper.vue";
+
+export default {
+  components: {
+    ModalWrapper,
+  },
+};
 </script>
 
 <style lang="scss" scoped>
+.with-background {
+  width: 100%;
+  margin: 0px !important;
+  top: 0;
+  right: 0;
+  min-height: 100vh;
+  background-image: url("../assets/images/bg.png");
+  background-repeat: no-repeat;
+  background-position: bottom right;
+}
+/* Modal styles */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #bdbdbd;
+
+  .heading {
+    font-family: Flutterwave;
+    text-transform: uppercase;
+    font-size: 18px;
+    line-height: 22px;
+    letter-spacing: 0.065em;
+    text-transform: uppercase;
+    color: #333333;
+  }
+
+  button {
+    appearance: none;
+    border: none;
+    background: none;
+  }
+}
+
+.success__notification {
+  display: flex;
+  flex-direction: column;
+
+  &-header {
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      justify-content: flex-end;
+      appearance: none;
+      border: none;
+      background: none;
+    }
+  }
+
+  &-check {
+    display: flex;
+    padding: 20px 0px;
+    justify-content: center;
+  }
+
+  &-text {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+}
+
+.form__group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+
+  &-label {
+    padding-bottom: 10px;
+  }
+
+  &-input {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 15px 25px;
+  }
+  &-button {
+    margin-top: 20px;
+    border: none;
+    width: 100%;
+  }
+}
+
+/* Single Event */
 .single-event {
   padding: 40px 140px;
   display: flex;

@@ -59,10 +59,21 @@ body {
   }
 }
 
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.5);
+  transform: scale(1.5);
+}
+
 // transitions
 .fade-enter,
 .fade-leave-active {
   opacity: 0;
+}
+
+.fade-eenter-active,
+.fade-leave-active {
+  transition: opacity 0.6s;
 }
 
 .modal-enter {
@@ -70,10 +81,4 @@ body {
 }
 .modal-leave-active {
   opacity: 0;
-}
-
-.modal-enter .modal-container,
-.modal-leave-active .modal-container {
-  -webkit-transform: scale(1.5);
-  transform: scale(1.5);
 }

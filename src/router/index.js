@@ -4,6 +4,7 @@ import VueRouter from "vue-router";
 // component imports
 const Home = () => import(/* webpackChunkName: "home" */ "@/views/Home.vue");
 const SingleEvent = () => import(/* webpackChunkName: "event" */ "@/views/SingleEvent.vue");
+const NoTickets = () => import(/* webpackChunkName: "event" */ "@/views/NoTickets.vue");
 
 Vue.use(VueRouter);
 
@@ -12,6 +13,11 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
+  },
+  {
+    path: "/didnt-get-ticket",
+    name: "NoTickets",
+    component: NoTickets,
   },
   {
     path: "/event/:id",

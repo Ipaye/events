@@ -21,7 +21,7 @@
           </div>
           <ul class="header__menu-links" id="menu" role="navigation" :class="[hamburgerIcon ? 'mobile' : '']">
             <li class="header__menu-link">
-              <router-link role="link" to="/">I didn’t get my tickets</router-link>
+              <router-link role="link" to="/didnt-get-ticket">I didn’t get my tickets</router-link>
             </li>
             <li class="header__menu-link">
               <router-link to="/" class="button-normal">
@@ -100,6 +100,7 @@ export default {
           top: 0;
           left: 0;
           height: 100vh;
+          z-index: 4;
           background: white;
           flex-direction: column;
           justify-content: center;
