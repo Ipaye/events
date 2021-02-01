@@ -4,22 +4,35 @@
     <main class="single-event">
       <div class="single-event__top">
         <div class="single-event__event-description">
-          <p class="single-event__event-description--date">8th February 2019</p>
-          <h4 class="single-event__event-description--heading">The Nathan Cole Experience</h4>
+          <p class="single-event__event-description--date">{{ shortDate(event.start_time) }}</p>
+          <h4 class="single-event__event-description--heading">{{ event.name }}</h4>
           <p class="single-event__event-description--info">
             Two-Time Grammy Award winner, Nathaniel Cole, who’s also <br />
             just released an album, <strong>Into The Wild,</strong> will be having his first <br />
             concert in Lagos, Nigeria! <br />
             Fans have waited so long for this announcement, and it promises to be everything anyone has imagined.
           </p>
-          <p class="single-event__event-description--price">
-            N5000 – N2,000,000
+          <p v-if="event.tickets.length >= 1" class="single-event__event-description--price">
+            {{ getMinMaxPrice(event.tickets) }}
           </p>
-          <button class="event-button button-large">BUY TICKETS</button>
+          <button v-if="event.tickets.length === 0" @click="isModalOpen = true" class="event-button button-large">
+            REGISTER FOR FREE
+          </button>
+          <router-link
+            v-else
+            :to="{
+              name: 'EventCheckoutView',
+              params: { id: event.id, event: event },
+            }"
+            class="event-button button-large"
+          >
+            BUY TICKETS
+          </router-link>
         </div>
         <div class="single-event__image">
           <figure>
-            <img :src="require('@/assets/images/placeholder.png')" alt="" />
+            <img v-if="event.image" class="event__details-image" :src="event.image" :alt="`${event.name} event`" />
+            <img v-else :src="require('@/assets/images/placeholder.png')" alt="" />
           </figure>
         </div>
       </div>
@@ -27,33 +40,17 @@
       <div class="single-event__bottom">
         <div class="single-event__event-venue">
           <p class="single-event__event-venue--heading">Venue</p>
-          <p class="single-event__event-venue--location">
-            Eko Atlantic Beach, Off Ahmadu Bello way, Victoria Island, Lagos.
-          </p>
+          <p class="single-event__event-venue--location">{{ event.venue }}</p>
           <p class="single-event__event-venue--map">
             <span class="map-icon">
-              <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g
-                  clip-path="url(#clip0)"
-                  stroke="#F5A623"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M.75 4.5v12l5.25-3 6 3 5.25-3v-12L12 4.5l-6-3-5.25 3zM6 1.5v12M12 4.5v12" />
-                </g>
-                <defs>
-                  <clipPath id="clip0">
-                    <path fill="#fff" d="M0 0h18v18H0z" />
-                  </clipPath>
-                </defs></svg
-            ></span>
+              <SvgSelector :name="'map-icon'" />
+            </span>
             View map for directions
           </p>
         </div>
         <div class="single-event__links">
           <p class="single-event__links--heading">DATE AND TIME</p>
-          <p class="single-event__links--date">Friday, February 8th 2019, 10:00pm</p>
+          <p class="single-event__links--date">{{ longDate(event.start_time) }}</p>
           <p class="single-event__links--link-title">SOCIAL LINKS</p>
           <router-link to="https://twitter.com/nathanielcole" class="single-event__links--external-links"
             >https://twitter.com/nathanielcole</router-link
@@ -69,79 +66,77 @@
     </main>
     <Footer />
 
-    <ModalWrapper v-if="false" class="modal-container">
-      <div v-if="true">
+    <ModalWrapper :show="isModalOpen" v-if="isModalOpen" @close="isModalOpen = false" class="modal-container">
+      <div v-if="hasRegistered == false">
         <div class="modal-header">
           <h4 class="heading">REGISTER FOR FREE</h4>
-          <button>
-            <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M13.5 4.5l-9 9M4.5 4.5l9 9"
-                stroke="#333"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+          <button @click="closeModal">
+            <SvgSelector :name="'close-icon'" />
           </button>
         </div>
         <form class="form">
           <div class="form__group">
             <label class="form__group-label" for="name">Full name</label>
-            <input class="form__group-input" type="text" />
+            <input
+              class="form__group-input"
+              type="text"
+              v-model="userDetails.name"
+              :class="{ 'form__group-input-error': $v.userDetails.name.$error }"
+              @input="$v.userDetails.name.$touch()"
+            />
+            <div v-if="$v.userDetails.name.$error" class="form__group-error">
+              Name is required.
+            </div>
           </div>
           <div class="form__group">
             <label class="form__group-label" for="email"> Email address</label>
-            <input class="form__group-input" type="email" />
+            <input
+              class="form__group-input"
+              type="email"
+              v-model.trim="userDetails.email"
+              :class="{ 'form__group-input-error': $v.userDetails.email.$error }"
+              @input="$v.userDetails.email.$touch()"
+            />
+            <div v-if="$v.userDetails.email.$error" class="form__group-error">
+              Email is required and should be a valid email.
+            </div>
           </div>
           <div class="form__group">
             <label class="form__group-label" for="number">Phone number</label>
-            <input type="text" class="form__group-input" />
+            <input
+              type="number"
+              class="form__group-input"
+              v-model.trim="userDetails.phone"
+              :class="{ 'form__group-input-error': $v.userDetails.phone.$error }"
+              @input="$v.userDetails.phone.$touch()"
+            />
+            <div v-if="$v.userDetails.phone.$error" class="form__group-error">
+              Phone number is required.
+            </div>
           </div>
           <div class="button-wrapper">
-            <button class="button-normal form__group-button">
-              REGISTER
+            <button
+              class="button-normal form__group-button"
+              @click.prevent="registerForFree"
+              :disabled="$v.$error || $v.$invalid"
+            >
+              {{ isRegisering ? "Please wait..." : "Register" }}
             </button>
           </div>
         </form>
       </div>
-      <div class="success__notification" v-if="false">
+      <div class="success__notification" v-if="hasRegistered">
         <div class="success__notification-header">
-          <button>
-            <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M18 6L6 18M6 6l12 12"
-                stroke="#333"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+          <button @click.prevent="closeModal">
+            <SvgSelector :name="'close-icon'" />
           </button>
         </div>
         <div class="success__notification-check">
           <div class="success__notification-check-icon">
-            <svg width="137" height="137" viewBox="0 0 137 137" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                class="checkmark__circle"
-                d="M125.583 63.2476V68.4993C125.576 80.8089 121.59 92.7864 114.22 102.646C106.849 112.505 96.4894 119.717 84.685 123.207C72.8806 126.698 60.2642 126.278 48.7174 122.013C37.1707 117.747 27.3122 109.862 20.6124 99.5359C13.9126 89.2093 10.7303 76.9937 11.5402 64.7108C12.3502 52.4279 17.1089 40.7358 25.1067 31.3784C33.1045 22.021 43.9128 15.4996 55.9197 12.7868C67.9267 10.074 80.4889 11.3151 91.7328 16.3251"
-                stroke="#F5A623"
-                stroke-width="4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                class="checkmark__check"
-                d="M125.583 22.8335L68.5 79.9739L51.375 62.8489"
-                stroke="#F5A623"
-                stroke-width="4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+            <SvgSelector :name="'notification-icon'" />
           </div>
         </div>
-        <div class="success__notification-text">You have successfully registered for</div>
+        <div class="success__notification-text">You have successfully registered for {{ event.name }}</div>
       </div>
     </ModalWrapper>
   </div>
@@ -149,10 +144,69 @@
 
 <script>
 import ModalWrapper from "@/components/ModalWrapper.vue";
+import { validationMixin } from "vuelidate";
+import { required, email } from "vuelidate/lib/validators";
+import { mapGetters, mapActions } from "vuex";
 
+import SvgSelector from "@/components/SvgSelector.vue";
 export default {
+  name: "SingleEvent",
+  props: ["id"],
   components: {
     ModalWrapper,
+    SvgSelector,
+  },
+  data() {
+    return {
+      userDetails: {
+        name: "",
+        email: "",
+        phone: "",
+      },
+      event: {},
+      isModalOpen: false,
+      hasRegistered: false,
+      isRegisering: false,
+      isSuccessModalOpen: false,
+    };
+  },
+  computed: {
+    ...mapGetters(["events", "loading"]),
+  },
+  mixins: [validationMixin],
+  validations: {
+    userDetails: {
+      name: { required },
+      email: { required, email },
+      phone: { required },
+    },
+  },
+  methods: {
+    ...mapActions(["getEvents", "registerFree"]),
+    registerForFree() {
+      this.isRegisering = true;
+      this.registerFree({ userDetails: this.userDetails, id: this.id })
+        .then(response => {
+          let { data } = response;
+          this.$toast.success("Registered Successfully", data.status, this.notificationSystem.options.success);
+          this.isRegisering = false;
+          this.hasRegistered = true;
+
+          this.userDetails.name = "";
+          this.userDetails.email = "";
+          this.userDetails.phone = "";
+        })
+        .catch(error => this.handleError(error));
+    },
+    closeModal() {
+      this.hasRegistered = false;
+      this.isModalOpen = false;
+    },
+  },
+
+  created() {
+    const eventID = this.$route.params.id;
+    this.event = this.events.find(current => parseInt(current.id) === parseInt(eventID));
   },
 };
 </script>
@@ -178,7 +232,7 @@ export default {
   border-bottom: 1px solid #bdbdbd;
 
   .heading {
-    font-family: Flutterwave;
+    font-family: $main-font;
     text-transform: uppercase;
     font-size: 18px;
     line-height: 22px;
@@ -218,29 +272,14 @@ export default {
 
   &-text {
     display: flex;
+    font-family: $main-font;
+    font-size: 18px;
+    line-height: 22px;
+    text-align: center;
+    letter-spacing: 0.065em;
+
     justify-content: center;
     margin-bottom: 40px;
-  }
-}
-
-.form__group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-
-  &-label {
-    padding-bottom: 10px;
-  }
-
-  &-input {
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    padding: 15px 25px;
-  }
-  &-button {
-    margin-top: 20px;
-    border: none;
-    width: 100%;
   }
 }
 
@@ -306,7 +345,7 @@ export default {
       }
     }
     &--heading {
-      font-family: Flutterwave;
+      font-family: $main-font;
       font-size: 36px;
       line-height: 40px;
       color: #12122c;
@@ -325,7 +364,7 @@ export default {
       }
     }
     &--info {
-      font-family: Flutterwave;
+      font-family: $main-font;
       font-size: 18px;
       line-height: 28px;
       font-style: italic;
@@ -339,7 +378,7 @@ export default {
       }
     }
     &--price {
-      font-family: Flutterwave;
+      font-family: $main-font;
       font-size: 24px;
       line-height: 28px;
       letter-spacing: 0.5px;
@@ -347,6 +386,8 @@ export default {
       margin-bottom: 20px;
     }
     .event-button {
+      display: flex;
+      justify-content: center;
       cursor: pointer;
       border: none;
       width: 348px;
@@ -384,7 +425,7 @@ export default {
       }
     }
     &--location {
-      font-family: Flutterwave;
+      font-family: $main-font;
       font-size: 24px;
       line-height: 32px;
       color: #333333;
@@ -402,7 +443,7 @@ export default {
       }
     }
     &--map {
-      font-family: Flutterwave;
+      font-family: $main-font;
       display: flex;
       font-size: 16px;
       line-height: 18px;
@@ -445,7 +486,7 @@ export default {
       }
     }
     &--date {
-      font-family: Flutterwave;
+      font-family: $main-font;
       font-size: 24px;
       line-height: 32px;
       color: #333333;
@@ -471,7 +512,7 @@ export default {
       }
     }
     &--external-links {
-      font-family: Flutterwave;
+      font-family: $main-font;
       display: flex;
       font-style: "normal";
       font-size: 14px;

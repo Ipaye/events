@@ -7,52 +7,47 @@ Vue.use(Vuex);
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
 });
+
 export default new Vuex.Store({
   state: {
     eventsData: {
       events: [],
-      pageInfo: {},
+      pageDetails: {},
     },
     tickets: [],
     loading: false,
-  },
-  getters: {
-    events: state => state.eventsData.events,
-    loading: state => state.loading,
-    pageInfo: state => state.eventsData.pageInfo,
-    tickets: state => state.tickets,
   },
   mutations: {
     SET_LOADING(state, payload) {
       state.loading = payload;
     },
-    CLEAR(state) {
-      state.tickets = "";
-      window.href("/");
-    },
     SET_EVENTS(state, payload) {
       state.eventsData.events.push(...payload);
     },
     SET_PAGE_DATA(state, payload) {
-      Vue.set(state.eventsData, "pageInfo", payload);
+      Vue.set(state.eventsData, "pageDetails", payload);
+    },
+    CLEAR(state) {
+      state.tickets = "";
+      window.href("/");
     },
     INCREMENT_TICKET(state, payload) {
       const ticket = state.tickets.find(t => t.id === payload);
-      const ticketIndex = state.tickets.indexOf(ticket);
+      const indexOfTicket = state.tickets.indexOf(ticket);
       ticket.count++;
       if (ticket.count >= ticket.qty_available) {
         ticket.count = ticket.qty_available;
       }
-      state.tickets.splice(ticketIndex, 1, ticket);
+      state.tickets.splice(indexOfTicket, 1, ticket);
     },
     DECREMENT_TICKET(state, payload) {
       const ticket = state.tickets.find(t => t.id === payload);
-      const ticketIndex = state.tickets.indexOf(ticket);
+      const indexOfTicket = state.tickets.indexOf(ticket);
       ticket.count--;
       if (ticket.count <= 0) {
         ticket.count = 0;
       }
-      state.tickets.splice(ticketIndex, 1, ticket);
+      state.tickets.splice(indexOfTicket, 1, ticket);
     },
     SET_TICKETS(state, payload) {
       state.tickets = [...payload];
@@ -77,16 +72,16 @@ export default new Vuex.Store({
           }),
         );
         commit("SET_EVENTS", events);
-        commit("SET_PAGE_DATA", data.data.pageInfo);
+        commit("SET_PAGE_DATA", data.data.pageDetails);
         commit("SET_LOADING", false);
       } catch (error) {
         console.log(error);
       }
     },
-    registerFree(_, { id, data }) {
+    registerFree(_, { id, userDetails }) {
       return new Promise((resolve, reject) => {
         axios
-          .post(`events/${id}/register`, data)
+          .post(`events/${id}/register`, userDetails)
           .then(response => {
             resolve(response);
           })
@@ -102,12 +97,18 @@ export default new Vuex.Store({
       commit("DECREMENT_TICKET", id);
     },
     setTickets({ commit }, tickets) {
-      const newTickets = tickets.map(e => {
-        e.count = 0;
-        return e;
+      const newTickets = tickets.map(event => {
+        event.count = 0;
+        return event;
       });
       commit("SET_TICKETS", newTickets);
     },
+  },
+  getters: {
+    events: state => state.eventsData.events,
+    loading: state => state.loading,
+    pageDetails: state => state.eventsData.pageDetails,
+    tickets: state => state.tickets,
   },
   plugins: [vuexLocal.plugin],
 });

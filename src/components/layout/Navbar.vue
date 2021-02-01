@@ -57,6 +57,10 @@ export default {
 .header__wrapper {
   padding: 1.4rem 4.5rem 0;
 
+  @include mobile {
+    padding: 1rem 1rem 0;
+  }
+
   @include small-mobile {
     padding: 1rem 1rem 0;
   }

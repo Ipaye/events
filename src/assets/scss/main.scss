@@ -1,20 +1,52 @@
-@import "partials/fonts";
-@import "partials/global";
+@charset 'utf-8';
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+
+@font-face {
+  font-family: Flutterwave;
+  font-weight: 400;
+  src: local("Flutterwave"), url("~@/assets/fonts/fw-400.ttf") format("truetype");
+  text-rendering: optimizeLegibility;
+}
+@font-face {
+  font-family: Flutterwave;
+  font-weight: 700;
+  font-style: normal;
+  src: local("Flutterwave"), url("~@/assets/fonts/fw-700.ttf") format("truetype");
+  text-rendering: optimizeLegibility;
+}
+@font-face {
+  font-family: Flutterwave;
+  font-weight: 900;
+  src: local("Flutterwave"), url("~@/assets/fonts/fw-900.ttf") format("truetype");
+  text-rendering: optimizeLegibility;
+}
+@font-face {
+  font-family: Flutterwave;
+  font-style: italic;
+  src: local("Flutterwave"), url("~@/assets/fonts/fw-italics.ttf") format("truetype");
+  text-rendering: optimizeLegibility;
+}
+@font-face {
+  font-family: "SF Display";
+  font-weight: 500;
+  src: url("~@/assets/fonts/SF.otf");
+}
+
 @import "partials/reset";
+// @import "partials/fonts";
+@import "partials/global";
 @import "partials/mq";
 @import "partials/mixin";
+@import "partials/forms";
 
 a {
   text-decoration: none;
 }
 
-body {
-  background: $background-color;
+html {
   font-size: 10px;
   height: 100%;
   overflow: auto;
-  margin: 0 !important;
-  padding: 0 !important;
 }
 
 .container {
@@ -23,11 +55,24 @@ body {
   margin: 0 auto;
 }
 
+button:disabled {
+  cursor: not-allowed;
+  background-color: rgb(140, 140, 140);
+  color: #000;
+
+  &:hover {
+    opacity: 0.88;
+    background-color: rgb(140, 140, 140);
+    transform: translate(0, -1px);
+  }
+}
+
 #app {
   width: 100%;
   min-height: 100vh;
   font-family: $main-font;
   color: $text-color;
+  background: #f2f2f2;
 }
 .fade-enter-active,
 .fade-leave-active {

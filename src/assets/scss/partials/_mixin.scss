@@ -19,3 +19,18 @@
     transform: translate(0, -1px);
   }
 }
+
+@mixin checkoutKey {
+  font-family: $main-font;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: bold;
+  color: #333333;
+}
+
+@mixin checkoutValue {
+  font-family: $main-font;
+  font-size: 14px;
+  line-height: 17px;
+  color: #4f4f4f;
+}

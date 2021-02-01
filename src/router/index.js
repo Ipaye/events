@@ -4,7 +4,8 @@ import VueRouter from "vue-router";
 // component imports
 const Home = () => import(/* webpackChunkName: "home" */ "@/views/Home.vue");
 const SingleEvent = () => import(/* webpackChunkName: "event" */ "@/views/SingleEvent.vue");
-const NoTickets = () => import(/* webpackChunkName: "event" */ "@/views/NoTickets.vue");
+const NoTickets = () => import(/* webpackChunkName: "no-ticket" */ "@/views/NoTickets.vue");
+const EventCheckout = () => import(/* webpackChunkName: "register" */ "@/views/EventCheckout.vue");
 
 Vue.use(VueRouter);
 
@@ -25,6 +26,13 @@ const routes = [
     component: SingleEvent,
     props: true,
   },
+  {
+    path: "/event/:id/register",
+    name: "EventCheckoutView",
+    component: EventCheckout,
+    props: true,
+  },
+  { path: "*", redirect: "/" },
 ];
 
 const router = new VueRouter({

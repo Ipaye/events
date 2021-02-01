@@ -1,19 +1,6 @@
 <template>
   <div class="event__card">
     <figure class="event__card-image">
-      <img class="event__card-image-item" :src="require('@/assets/images/placeholder.png')" />
-    </figure>
-    <p class="event__card-date">8th February 2019</p>
-    <h3 class="event__card-name">The Nathan Cole Experience</h3>
-    <p class="event__card-price">
-      <span class="free">
-        Free
-      </span>
-    </p>
-  </div>
-  <!-- <div class="event__card">
-    <figure class="event__card-image">
-      <img v-if="event.image" class="event__card-image-item" :src="event.image" :alt="`${event.name} event`" />
       <img v-if="event.image" class="event__card-image-item" :src="event.image" :alt="`${event.name} event`" />
       <img
         v-else
@@ -22,16 +9,16 @@
         :alt="`${event.name} event`"
       />
     </figure>
-    <p class="event__card-date">{{ format(event.start_time) }}</p>
+    <p class="event__card-date">{{ shortDate(event.start_time) }}</p>
     <h3 class="event__card-name">{{ event.name }}</h3>
     <p class="event__card-price">
-      <span class="free" v-if="event.is_free || Object.keys(event.tickets).length === 0">
+      <span class="free" v-if="event.is_free || event.tickets.length === 0">
         Free
       </span>
       <span class="sold" v-else-if="event.is_sold_out">Sold out</span>
-      <span v-else> {{ getMinMax(event.tickets) }}</span>
+      <span v-else> {{ getMinMaxPrice(event.tickets) }}</span>
     </p>
-  </div> -->
+  </div>
 </template>
 <script>
 export default {
@@ -74,14 +61,14 @@ export default {
     letter-spacing: 0.5px;
     margin-top: 0.5rem;
     color: $secondary-color;
+    .free {
+      color: $green;
+      font-weight: bold;
+    }
+    .sold {
+      color: $red;
+      font-weight: bold;
+    }
   }
-}
-.free {
-  color: $green;
-  font-weight: bold;
-}
-.sold {
-  color: $red;
-  font-weight: bold;
 }
 </style>

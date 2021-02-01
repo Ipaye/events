@@ -34,11 +34,10 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 100000;
+  z-index: 1000;
 }
 
 .modal-item {
-  max-height: 80vh;
   width: 470px;
   margin: -10rem auto 0;
   padding-bottom: 2.8rem;

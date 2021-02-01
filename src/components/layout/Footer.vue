@@ -32,12 +32,15 @@ export default {};
     padding: 0 3rem 3rem;
     letter-spacing: 0.0028px;
 
-    @include small-mobile {
-      padding: 1rem 1rem 0;
-    }
-
     @include weird-medium {
       flex-direction: column;
+      padding: 1rem 1rem 2rem;
+    }
+    @include phablet {
+      padding: 1rem 1rem 2rem;
+    }
+    @include mobile {
+      padding: 1rem 1rem 2rem;
     }
 
     &-info {
