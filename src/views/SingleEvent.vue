@@ -393,7 +393,10 @@ export default {
       width: 348px;
 
       @include desktop {
-        width: 200px;
+        width: 300px;
+      }
+      @include mobile {
+        width: 100%;
       }
     }
   }
